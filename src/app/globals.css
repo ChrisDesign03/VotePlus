@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+/* =====================================================================
+   VOTEPLUS · SYSTÈME DE DESIGN
+   Pour changer l'identité visuelle du site, modifiez uniquement ce bloc.
+   ===================================================================== */
+@theme {
+  /* Polices (auto-hébergées, aucune dépendance à Google) */
+  --font-sans: "Hanken Grotesk Variable", ui-sans-serif, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-display: "Fraunces Variable", Georgia, "Times New Roman", serif;
+
+  /* Fonds sombres : la scène */
+  --color-nuit: #1e0a2e;
+  --color-nuit-2: #2a1342;
+  --color-nuit-3: #3d2160;
+
+  /* Couleur de marque : la prune */
+  --color-prune: #4a1470;
+  --color-prune-fonce: #3a0f5a;
+  --color-prune-50: #f4eefa;
+  --color-prune-100: #e7d9f3;
+
+  /* Accent : l'or du podium */
+  --color-or: #f0b93a;
+  --color-or-clair: #f7d27a;
+  --color-or-texte: #7a5400; /* or lisible sur fond clair */
+
+  /* Neutres teintés de prune */
+  --color-papier: #f8f6fb; /* fond des pages */
+  --color-encre: #1b1325; /* texte principal */
+  --color-encre-2: #5b5169; /* texte secondaire */
+  --color-lavande: #cdbfe0; /* texte secondaire sur fond sombre */
+  --color-trait: #e4deeb; /* bordures et séparateurs */
+
+  /* États */
+  --color-succes: #0e7a5c;
+  --color-succes-50: #e6f5ef;
+  --color-erreur: #b3203f;
+  --color-erreur-50: #fcebef;
+  --color-focus: #9b5ccb;
+
+  /* Animation du classement : une seule, jouée une fois */
+  --animate-barre: barre 1100ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  @keyframes barre {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-papier);
+  color: var(--color-encre);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Focus clavier visible partout */
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--color-or-clair);
+  color: var(--color-nuit);
+}
+
+/* Respect des personnes qui réduisent les animations */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

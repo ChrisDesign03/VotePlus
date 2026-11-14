@@ -13,7 +13,7 @@ import { verifyTurnstile } from "@/lib/turnstile";
 import { safeNext } from "@/lib/safe-next";
 
 export type FreeVoteState = { error?: string; done?: boolean } | null;
-export type VoterAuthState = { error?: string; message?: string } | null;
+export type VoterAuthState = { error?: string; message?: string; sent?: boolean; email?: string } | null;
 
 const text = (fd: FormData, k: string) => String(fd.get(k) ?? "").trim();
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -111,7 +111,24 @@ export async function voterMagicLinkAction(_prev: VoterAuthState, fd: FormData):
     console.error("[VotePlus] lien de connexion :", error.code, error.message);
     return { error: "Le lien n'a pas pu être envoyé. Vérifiez l'adresse et réessayez." };
   }
-  return { message: "Lien envoyé ! Ouvrez votre boîte e-mail (regardez aussi les spams) et cliquez sur le lien pour revenir voter." };
+  return {
+    sent: true,
+    email,
+    message: "E-mail envoyé ! Ouvrez-le (regardez aussi les spams) et recopiez ici le code à chiffres qu'il contient.",
+  };
+}
+
+// Connexion avec le code à chiffres reçu par e-mail : fonctionne sur n'importe quel appareil ou navigateur
+export async function verifyVoterCodeAction(_prev: VoterAuthState, fd: FormData): Promise<VoterAuthState> {
+  const next = safeNext(text(fd, "next"));
+  const email = text(fd, "email").toLowerCase();
+  const code = text(fd, "code").replace(/\s+/g, "");
+  if (!EMAIL_RE.test(email)) return { error: "Adresse e-mail invalide." };
+  if (!/^\d{6,10}$/.test(code)) return { sent: true, email, error: "Saisissez le code à chiffres reçu par e-mail." };
+  const supabase = await createClient();
+  const { error } = await supabase.auth.verifyOtp({ email, token: code, type: "email" });
+  if (error) return { sent: true, email, error: "Code incorrect ou expiré. Vérifiez-le, ou demandez-en un nouveau." };
+  redirect(next);
 }
 
 // L'organisateur annule (ou rétablit) les votes gratuits jugés suspects

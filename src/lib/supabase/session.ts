@@ -13,6 +13,17 @@ function matches(pathname: string, prefixes: string[]) {
 
 // Rafraîchit la session de l'utilisateur à chaque requête et applique les redirections.
 export async function updateSession(request: NextRequest) {
+  // Filet de sécurité : si Supabase renvoie le code de connexion vers une autre page que
+  // /auth/callback (adresse de retour non autorisée), on le traite quand même pour ouvrir la session.
+  const code = request.nextUrl.searchParams.get("code");
+  if (code && request.nextUrl.pathname !== "/auth/callback") {
+    const callback = new URL("/auth/callback", request.url);
+    callback.searchParams.set("code", code);
+    const next = request.nextUrl.searchParams.get("next");
+    if (next) callback.searchParams.set("next", next);
+    return NextResponse.redirect(callback);
+  }
+
   let response = NextResponse.next({ request });
   const { url, key } = getSupabaseEnv();
 

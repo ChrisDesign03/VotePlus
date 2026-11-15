@@ -113,7 +113,7 @@ export function VotePanel({
       <FormAlert error={state?.error} />
 
       <ConsentCheckbox paid />
-      <TurnstileField />
+      <TurnstileField resetKey={state} />
 
       <SubmitButton variant="gold" disabled={!selected}>
         {selected ? `Payer ${formatMoney(selected.price, currency)} et voter ${first}` : "Choisissez un pack"}

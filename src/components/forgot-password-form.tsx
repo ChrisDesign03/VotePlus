@@ -11,7 +11,7 @@ export function ForgotPasswordForm() {
     <form action={action} className="space-y-5">
       <FormAlert error={state?.error} message={state?.message} />
       <Field label="Adresse e-mail du compte" name="email" type="email" autoComplete="email" placeholder="vous@exemple.com" defaultValue={state?.values?.email} />
-      <TurnstileField />
+      <TurnstileField resetKey={state} />
       <SubmitButton>Recevoir le lien</SubmitButton>
     </form>
   );

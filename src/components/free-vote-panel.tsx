@@ -81,7 +81,7 @@ export function FreeVotePanel({
       <p className="text-sm text-encre-2">Connecté en tant que {info.voterName}. {periodDaily ? "1 vote gratuit par jour." : "1 vote gratuit, une seule fois."}</p>
       <FormAlert error={state?.error} />
       <ConsentCheckbox />
-      <TurnstileField />
+      <TurnstileField resetKey={state} />
       <SubmitButton variant="gold">Voter gratuitement pour {first}</SubmitButton>
     </form>
   );

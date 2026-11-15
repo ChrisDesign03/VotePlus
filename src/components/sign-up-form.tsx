@@ -35,7 +35,7 @@ export function SignUpForm() {
         hint="Au moins 8 caractères."
       />
       <ConsentCheckbox organizer />
-      <TurnstileField />
+      <TurnstileField resetKey={state} />
       <SubmitButton>Créer mon compte</SubmitButton>
     </form>
   );

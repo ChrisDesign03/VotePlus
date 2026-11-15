@@ -43,7 +43,7 @@ export function VoterLogin({ next, initialError }: { next: string; initialError?
         <FormAlert error={state?.error} message={state?.message} />
         <Field label="Votre adresse e-mail" name="email" type="email" autoComplete="email" placeholder="vous@exemple.com" />
         <ConsentCheckbox />
-        <TurnstileField />
+        <TurnstileField resetKey={state} />
         <SubmitButton>Recevoir mon code par e-mail</SubmitButton>
       </form>
       )}
